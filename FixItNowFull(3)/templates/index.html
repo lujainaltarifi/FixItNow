@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Home' if session.lang=='en' else 'الرئيسية' }}{% endblock %}
+{% block content %}
+<section class="hero">
+  <img src="{{ url_for('static', filename='images/home-bg.jpg') }}"
+       class="hero-img" alt="Home background"/>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>{{ 'Welcome to FixItNow' if session.lang=='en'
+           else 'أهلاً بك في FixItNow' }}</h1>
+    <p class="hero-lead">
+      {{ 'Your AI-powered home repair assistant—instant troubleshooting & step-by-step guides.'
+         if session.lang=='en'
+         else 'مساعدك الذكي لصيانة المنزل–تشخيص فوري وخطوات إصلاح.' }}
+    </p>
+    <a href="{{ url_for('chat') }}" class="btn btn-large">
+      {{ 'Start Chat' if session.lang=='en' else 'ابدأ المحادثة' }}
+    </a>
+  </div>
+</section>
+
+<section class="creative-cards">
+  <h2>{{ 'How It Works' if session.lang=='en' else 'كيفية الاستخدام' }}</h2>
+  <div class="cards">
+    <div class="card">
+      <img src="{{ url_for('static', filename='images/illustration-diy.png') }}" alt="">
+      <h3>{{ 'Describe Issue' if session.lang=='en' else 'اختر المشكلة' }}</h3>
+      <p>{{ 'Type or upload a photo/video.' if session.lang=='en'
+           else 'اكتب وصفًا أو أرفق صورة/فيديو.' }}</p>
+    </div>
+    <div class="card">
+      <img src="{{ url_for('static', filename='images/illustration-chatbot.png') }}" alt="">
+      <h3>{{ 'AI Diagnosis' if session.lang=='en' else 'تشخيص ذكي' }}</h3>
+      <p>{{ 'Get likely cause & fix steps.' if session.lang=='en'
+           else 'احصل على السبب والخطوات.' }}</p>
+    </div>
+    <div class="card">
+      <img src="{{ url_for('static', filename='images/illustration-tools.png') }}" alt="">
+      <h3>{{ 'Step-by-Step Fix' if session.lang=='en' else 'خطوات الإصلاح' }}</h3>
+      <p>{{ 'Follow clear instructions.' if session.lang=='en'
+           else 'اتبع التعليمات بوضوح.' }}</p>
+    </div>
+    <div class="card">
+      <img src="{{ url_for('static', filename='images/illustration-technician.png') }}" alt="">
+      <h3>{{ 'Find a Pro' if session.lang=='en' else 'ابحث عن فني' }}</h3>
+      <p>{{ 'Schedule vetted technicians.' if session.lang=='en'
+           else 'احجز فنيين معتمدين.' }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  {% if not session.user_id %}
+    <a href="{{ url_for('signup', role='user') }}" class="btn">
+      {{ 'Sign Up (User)' if session.lang=='en' else 'سجل كمستخدم' }}
+    </a>
+    <a href="{{ url_for('signup', role='technician') }}" class="btn">
+      {{ 'Register as Technician' if session.lang=='en'
+         else 'سجل كفني' }}
+    </a>
+  {% endif %}
+</section>
+{% endblock %}

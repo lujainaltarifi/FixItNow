@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Login' if session.lang=='en' else 'تسجيل دخول' }}{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+  <div class="auth-container">
+    <h2>
+      {{ 'Login to your account' if session.lang=='en' else 'تسجيل الدخول' }}
+    </h2>
+    {% if error %}
+      <p class="error">
+        {{ 'Invalid credentials' if session.lang=='en'
+           else 'بيانات غير صحيحة' }}
+      </p>
+    {% endif %}
+    <form method="post">
+      <label>{{ 'Email' if session.lang=='en' else 'البريد الإلكتروني' }}</label>
+      <input type="email" name="email" required/>
+
+      <label>{{ 'Password' if session.lang=='en' else 'كلمة المرور' }}</label>
+      <input type="password" name="password" required/>
+
+      <button type="submit" class="btn">
+        {{ 'Login' if session.lang=='en' else 'دخول' }}
+      </button>
+    </form>
+    <p>
+      {{ "Don't have an account?" if session.lang=='en' else 'ليس لديك حساب؟' }}
+      <a href="{{ url_for('signup') }}">
+        {{ 'Sign Up' if session.lang=='en' else 'إنشاء حساب' }}
+      </a>
+    </p>
+  </div>
+</section>
+{% endblock %}

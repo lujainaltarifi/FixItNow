@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Find Technician' if session.lang=='en' else 'ابحث عن فني' }}{% endblock %}
+
+{% block content %}
+<section class="find-section">
+  <h2>
+    {{ 'Technicians Near You' if session.lang=='en' else 'الفنيون بالقرب منك' }}
+  </h2>
+  <div id="map"></div>
+  <ul id="techList" class="tech-list"></ul>
+</section>
+
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<script>
+const indic = {0:'٠',1:'١',2:'٢',3:'٣',4:'٤',5:'٥',6:'٦',7:'٧',8:'٨',9:'٩'};
+function toIndic(s){return s.replace(/\d/g,d=>indic[d]);}
+function haversine(lat1,lon1,lat2,lon2){
+  const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2 +
+    Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(a));
+}
+const specs_en=[], specs_ar=[];
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const locale="{{ session.lang }}",
+        list=document.getElementById('techList');
+  function render(uLat,uLng){
+    const map=L.map('map').setView([uLat,uLng],12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      attribution:'© OpenStreetMap'
+    }).addTo(map);
+    L.marker([uLat,uLng]).addTo(map)
+     .bindPopup(locale=='en'?'You are here':'أنت هنا').openPopup();
+
+    for(let i=0;i<10;i++){
+      const lat=uLat+(Math.random()*0.1-0.05),
+            lng=uLng+(Math.random()*0.1-0.05),
+            name_en=`${specs_en[i]} Pro`,
+            name_ar=`${specs_ar[i]} ${["محمد","علي","سارة","مريم","خالد","رانيا","محمود","نور","عمر","دانا"][i]}`,
+            rating=(4+Math.random()).toFixed(1),
+            raw='079'+Math.floor(1e6+Math.random()*9e6),
+            phone_en=raw, phone_ar=toIndic(raw),
+            dist=haversine(uLat,uLng,lat,lng).toFixed(1);
+
+      const popup = locale=='en'
+        ?`${name_en}<br>${specs_en[i]}<br>Rating: ${rating}★<br>${dist} km`
+        :`${name_ar}<br>${specs_ar[i]}<br>تقييم: ${rating}★<br>${toIndic(dist)} كم`;
+
+      const marker = L.marker([lat,lng]).addTo(map).bindPopup(popup);
+
+      const li = document.createElement('li');
+      li.className='tech-item';
+      li.innerHTML = locale=='en'
+        ?`<strong>${name_en}</strong> — ${specs_en[i]} — ${dist} km<br>
+            Phone: <span dir="ltr">${phone_en}</span>`
+        :`<strong>${name_ar}</strong> — ${specs_ar[i]} — ${toIndic(dist)} كم<br>
+            هاتف: <span dir="auto">${phone_ar}</span>`;
+
+      const form = document.createElement('form');
+      form.method='get'; form.action='{{ url_for("confirm") }}';
+      form.innerHTML = `
+        <input type="hidden" name="tech" value="${locale=='en'?name_en:name_ar}">
+        <button type="submit" class="btn-small">
+          {{ 'Request' if session.lang=='en' else 'اطلب' }}
+        </button>`;
+      li.appendChild(form);
+
+      li.addEventListener('click', ()=>{
+        map.setView([lat,lng],14,{animate:true});
+        marker.openPopup();
+      });
+      list.appendChild(li);
+    }
+  }
+
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      pos=>render(pos.coords.latitude,pos.coords.longitude),
+      ()=>alert(locale=='en'?'Cannot fetch location':'تعذّر الحصول على موقعك')
+    );
+  } else {
+    alert(locale=='en'?'Geolocation not supported':'الموقع غير مدعوم');
+  }
+});
+</script>
+{% endblock %}

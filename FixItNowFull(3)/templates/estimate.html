@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Estimate' if session.lang=='en' else 'التكلفة' }}{% endblock %}
+
+{% block content %}
+<section class="estimate-section">
+  <h2>{{ 'Get an Estimate' if session.lang=='en' else 'احصل على تقدير' }}</h2>
+  <form method="post">
+    <label>{{ 'Issue Type' if session.lang=='en' else 'نوع العطل' }}</label>
+    <select name="issue" required>
+      {% for key,(en,ar,_) in issues.items() %}
+      <option value="{{key}}">
+        {{ en if session.lang=='en' else ar }}
+      </option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn">
+      {{ 'Calculate' if session.lang=='en' else 'احسب' }}
+    </button>
+  </form>
+  {% if price %}
+    <p class="estimate-result">
+      {{ 'Estimated price:' if session.lang=='en' else 'السعر المقدر:' }}
+      <strong>{{ price }}</strong>
+    </p>
+  {% endif %}
+</section>
+{% endblock %}

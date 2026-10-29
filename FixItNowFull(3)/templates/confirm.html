@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Confirm Request' if session.lang=='en' else 'تأكيد الطلب' }}{% endblock %}
+
+{% block content %}
+<section class="confirm-section">
+  <h2>{{ 'Schedule Technician' if session.lang=='en' else 'جدولة الفني' }}</h2>
+  <p>
+    {{ 'You requested:' if session.lang=='en' else 'طلبيتك:' }}
+    <strong>{{ tech }}</strong>
+  </p>
+  <form method="post">
+    <label>{{ 'Preferred Date' if session.lang=='en' else 'التاريخ' }}</label>
+    <input type="date" name="date" required/>
+    <label>{{ 'Preferred Time' if session.lang=='en' else 'الوقت' }}</label>
+    <input type="time" name="time" required/>
+    <button type="submit" class="btn">
+      {{ 'Confirm' if session.lang=='en' else 'تأكيد' }}
+    </button>
+  </form>
+</section>
+{% endblock %}

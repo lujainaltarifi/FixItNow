@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Chat' if session.lang=='en' else 'دردشة الصيانة' }}{% endblock %}
+
+{% block content %}
+<main class="chat-page"
+      style="background-image: url('{{ url_for('static', filename='images/chat-bg.jpg') }}')">
+  <div class="chat-container">
+    <div id="chatWindow" class="chat-window"></div>
+    <form id="chatForm" class="chat-input-form">
+      <input
+        type="text"
+        id="userInput"
+        placeholder="{{ 'Type your problem here…' if session.lang=='en'
+                     else 'اكتب مشكلتك هنا…' }}"
+        autocomplete="off"
+      />
+      <button type="submit">
+        {{ 'Send' if session.lang=='en' else 'إرسال' }}
+      </button>
+    </form>
+  </div>
+</main>
+{% endblock %}

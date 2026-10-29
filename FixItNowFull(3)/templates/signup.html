@@ -1,0 +1,92 @@
+<!-- templates/signup.html -->
+{% extends "base.html" %}
+{% block title %}{{ 'Sign Up' if session.lang=='en' else 'إنشاء حساب جديد' }}{% endblock %}
+{% block content %}
+<section class="auth-section">
+  <div class="auth-container">
+    <h2>{{ 'Create Account' if session.lang=='en' else 'إنشاء حساب جديد' }}</h2>
+    <div class="role-toggle">
+      <button type="button" id="roleUser" class="role-btn active">{{ 'User' if session.lang=='en' else 'مستخدم' }}</button>
+      <button type="button" id="roleTech" class="role-btn">{{ 'Technician' if session.lang=='en' else 'فني' }}</button>
+    </div>
+    {% if error %}
+    <p class="error">{{ 'User or email already exists' if session.lang=='en' else 'المستخدم أو البريد موجود بالفعل' }}</p>
+    {% endif %}
+    <form method="post" id="signupForm">
+      <input type="hidden" name="role" id="roleInput" value="user">
+      <div class="form-group">
+        <label>{{ 'Username' if session.lang=='en' else 'اسم المستخدم' }}</label>
+        <input type="text" name="username" required>
+      </div>
+      <div class="form-group">
+        <label>{{ 'Email' if session.lang=='en' else 'البريد الإلكتروني' }}</label>
+        <input type="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label>{{ 'Password' if session.lang=='en' else 'كلمة المرور' }}</label>
+        <input type="password" name="password" required>
+      </div>
+      <div id="techFields" class="tech-fields">
+        <div class="form-group">
+          <label>{{ 'Phone' if session.lang=='en' else 'رقم الهاتف' }}</label>
+          <input type="text" name="phone">
+        </div>
+        <div class="form-group">
+          <label>{{ 'Specialty' if session.lang=='en' else 'التخصص' }}</label>
+          <select name="specialty">
+            <option value="">{{ 'Select specialty' if session.lang=='en' else 'اختر التخصص' }}</option>
+            <option value="Carpenter">{{ 'Carpenter' if session.lang=='en' else 'نجار' }}</option>
+            <option value="Electrician">{{ 'Electrician' if session.lang=='en' else 'كهربائي' }}</option>
+            <option value="Plumber">{{ 'Plumber' if session.lang=='en' else 'سباك' }}</option>
+            <option value="Painter">{{ 'Painter' if session.lang=='en' else 'دهان' }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>{{ 'Maintenance Type' if session.lang=='en' else 'نوع الصيانة' }}</label>
+          <select name="maintenance">
+            <option value="">{{ 'Select type' if session.lang=='en' else 'اختر النوع' }}</option>
+            <option value="Installation">{{ 'Installation' if session.lang=='en' else 'تركيب' }}</option>
+            <option value="Repair">{{ 'Repair' if session.lang=='en' else 'إصلاح' }}</option>
+            <option value="Inspection">{{ 'Inspection' if session.lang=='en' else 'فحص' }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>{{ 'Region' if session.lang=='en' else 'المنطقة' }}</label>
+          <select name="region">
+        <option value="Amman">{{ 'Amman' if session.lang=='en' else 'عمان' }}</option>
+        <option value="Irbid">{{ 'Irbid' if session.lang=='en' else 'إربد' }}</option>
+        <option value="Zarqa">{{ 'Zarqa' if session.lang=='en' else 'الزرقاء' }}</option>
+        <option value="Balqa">{{ 'Balqa' if session.lang=='en' else 'البلقاء' }}</option>
+        <option value="Ajloun">{{ 'Ajloun' if session.lang=='en' else 'عجلون' }}</option>
+        <option value="Madaba">{{ 'Madaba' if session.lang=='en' else 'مادبا' }}</option>
+        <option value="Karak">{{ 'Karak' if session.lang=='en' else 'الكرك' }}</option>
+        <option value="Maan">{{ 'Maan' if session.lang=='en' else 'معان' }}</option>
+        <option value="Aqaba">{{ 'Aqaba' if session.lang=='en' else 'العقبة' }}</option>
+        <option value="Mafraq">{{ 'Mafraq' if session.lang=='en' else 'المفرق' }}</option>
+        <option value="Jerash">{{ 'Jerash' if session.lang=='en' else 'جرش' }}</option>
+        <option value="Tafilah">{{ 'Tafilah' if session.lang=='en' else 'الطفيلة' }}</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn">{{ 'Sign Up' if session.lang=='en' else 'إنشاء' }}</button>
+    </form>
+    <p>{{ 'Already have an account?' if session.lang=='en' else 'لديك حساب؟' }}
+      <a href="{{ url_for('login') }}">{{ 'Login' if session.lang=='en' else 'تسجيل دخول' }}</a>
+    </p>
+  </div>
+</section>
+<script>
+document.getElementById('roleUser').onclick=function(){
+  document.getElementById('roleUser').classList.add('active');
+  document.getElementById('roleTech').classList.remove('active');
+  document.getElementById('techFields').style.display='none';
+  document.getElementById('roleInput').value='user';
+}
+document.getElementById('roleTech').onclick=function(){
+  document.getElementById('roleTech').classList.add('active');
+  document.getElementById('roleUser').classList.remove('active');
+  document.getElementById('techFields').style.display='block';
+  document.getElementById('roleInput').value='tech';
+}
+</script>
+{% endblock %}

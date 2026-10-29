@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="{{ session.lang }}" dir="{{ 'rtl' if session.lang=='ar' else 'ltr' }}">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>{% block title %}FixItNow{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-logo">FixItNow</div>
+    <ul class="nav-links">
+      {% if session.user_id %}
+        <li><a href="{{ url_for('index') }}"
+               class="{{ 'active' if request.endpoint=='index' else '' }}">
+          {{ 'Home' if session.lang=='en' else 'الرئيسية' }}
+        </a></li>
+        <li><a href="{{ url_for('chat') }}"
+               class="{{ 'active' if request.endpoint=='chat' else '' }}">
+          {{ 'Chat' if session.lang=='en' else 'دردشة' }}
+        </a></li>
+        <li><a href="{{ url_for('estimate') }}"
+               class="{{ 'active' if request.endpoint=='estimate' else '' }}">
+          {{ 'Estimate' if session.lang=='en' else 'التكلفة' }}
+        </a></li>
+        <li><a href="{{ url_for('find') }}"
+               class="{{ 'active' if request.endpoint=='find' else '' }}">
+          {{ 'Find Tech' if session.lang=='en' else 'ابحث عن فني' }}
+        </a></li>
+        <li><a href="{{ url_for('rate') }}"
+               class="{{ 'active' if request.endpoint=='rate' else '' }}">
+          {{ 'Rate Us' if session.lang=='en' else 'قيمنا' }}
+        </a></li>
+        <li><a href="{{ url_for('logout') }}">
+          {{ 'Logout' if session.lang=='en' else 'تسجيل خروج' }}
+        </a></li>
+      {% else %}
+        <li><a href="{{ url_for('login') }}"
+               class="{{ 'active' if request.endpoint=='login' else '' }}">
+          {{ 'Login' if session.lang=='en' else 'تسجيل دخول' }}
+        </a></li>
+        <li><a href="{{ url_for('signup') }}"
+               class="{{ 'active' if request.endpoint=='signup' else '' }}">
+          {{ 'Sign Up' if session.lang=='en' else 'إنشاء حساب' }}
+        </a></li>
+      {% endif %}
+    </ul>
+    <ul class="lang-switcher">
+      <li><a href="{{ url_for('set_lang', lang='ar') }}"
+             class="{{ 'active' if session.lang=='ar' else '' }}">العربية</a></li>
+      <li><a href="{{ url_for('set_lang', lang='en') }}"
+             class="{{ 'active' if session.lang=='en' else '' }}">English</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

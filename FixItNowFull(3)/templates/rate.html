@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Rate Us' if session.lang=='en' else 'قيمنا' }}{% endblock %}
+
+{% block content %}
+<section class="rate-section">
+  <h2>{{ 'How did we do?' if session.lang=='en' else 'كيف كانت تجربتك؟' }}</h2>
+  {% if not thanked %}
+  <form class="rate-form" method="post">
+    <button name="rating" value="😞">😞</button>
+    <button name="rating" value="😐">😐</button>
+    <button name="rating" value="😊">😊</button>
+  </form>
+  {% else %}
+    <p class="thank-you">
+      {{ 'Thank you for your feedback!' if session.lang=='en' else 'شكراً على تقييمك!' }}
+    </p>
+  {% endif %}
+</section>
+{% endblock %}
